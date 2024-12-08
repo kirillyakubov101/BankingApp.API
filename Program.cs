@@ -1,5 +1,7 @@
 
 using Banking.API.Data;
+using Banking.API.Interfaces;
+using Banking.API.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Banking.API
@@ -20,6 +22,8 @@ namespace Banking.API
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();
 

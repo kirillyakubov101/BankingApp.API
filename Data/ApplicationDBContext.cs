@@ -7,11 +7,12 @@ namespace Banking.API.Data
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-            
+
         }
 
         //TABLES
-        public DbSet<Account> Account { get; set; }
-        
+        public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<User> Users { get; set; }
+
     }
 }
