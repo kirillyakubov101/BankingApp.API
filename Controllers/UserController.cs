@@ -4,6 +4,7 @@ using Banking.API.Interfaces;
 using Banking.API.Mappers;
 using Banking.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.X86;
 
 namespace Banking.API.Controllers
 {
@@ -89,15 +90,30 @@ namespace Banking.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
-            var result = await _userRepo.TryLoginAsync(loginDTO);
-            if(result == false)
+            // Validate login credentials
+            var isValid = await _userRepo.TryLoginAsync(loginDTO);
+            if (!isValid)
             {
                 return Unauthorized("Invalid username or password.");
             }
-            else
+
+            // Fetch the user's details directly by username
+            var user = await _userRepo.GetUserByUsernameAsync(loginDTO.Username);
+            if (user == null)
             {
-                return Ok("Login successful!");
+                return Unauthorized("User not found.");
             }
+
+            // Construct and return the LoggedInUserDTO
+            var userDto = new LoggedInUserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                AccountType = user.BankAccount?.AccountType.ToString(),
+                Balance = user.BankAccount?.Balance
+            };
+
+            return Ok(userDto);
         }
 
         //[HttpDelete]

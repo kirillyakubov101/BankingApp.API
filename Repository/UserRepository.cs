@@ -44,6 +44,13 @@ namespace Banking.API.Repository
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users
+             .Include(u => u.BankAccount)
+             .SingleOrDefaultAsync(u => u.Username == username);
+        }
+
         public async Task<bool> TryLoginAsync(LoginDTO loginDTO)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginDTO.Username);

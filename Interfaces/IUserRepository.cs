@@ -10,5 +10,6 @@ namespace Banking.API.Interfaces
         public Task<User?> DeleteUserAsync(int id);
         public Task<bool> DoesUserExistAsync(string username);
         public Task<bool> TryLoginAsync(LoginDTO loginDTO);
+        public Task<User?> GetUserByUsernameAsync(string username);
     }
 }
